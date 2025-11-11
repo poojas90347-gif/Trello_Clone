@@ -26,6 +26,10 @@ def create(user: schemas.UserCreate, db: Session=Depends(get_db)):
     db.refresh(new_user)
     return{"id":new_user.id, "username": new_user.username, "email": new_user.email}
 
+@app.get("/users", response_model=list[schemas.ShowUser])
+def get_all(db: Session = Depends(get_db)):
+    return db.query(models.User).all()
+
 
 @app.post("/login")
 def login(form_data: OAuth2PasswordRequestForm =Depends(), db: Session = Depends(get_db)):
